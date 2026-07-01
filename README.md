@@ -1,0 +1,2 @@
+# MAP
+Mean Angular Preservation
