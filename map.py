@@ -132,7 +132,7 @@ def _get_cache(X: pd.DataFrame, n_jobs: int, force_rebuild: bool) -> _MAPCache:
 
 def _scale_map(map_raw: float, theta_max: float, theta_min: float) -> float:
     denom = max(theta_max - theta_min, 1e-12)
-    return float((map_raw - theta_min) / denom)
+    return float(1 - ((map_raw - theta_min) / denom))
 
 
 def MAP(
