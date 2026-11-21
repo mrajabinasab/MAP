@@ -1,13 +1,13 @@
 # MAP: Mean Angular Preservation
 
-MAP computes a normalized **Mean Angular Preservation** score for a set of selected features. It measures how much the first principal component changes when each non-selected feature is removed from the input data.
+MAP computes a normalized **Mean Angular Preservation** score for a set of selected features. It measures how much the first principal component changes when each non-selected feature is set to zero in the standardized data.
 
 This implementation provides two execution modes:
 
 * **Direct mode**: computes only the values needed for the current call.
 * **Benchmark/cache mode**: precomputes and caches per-feature values for faster repeated calls on the same dataset.
 
-The implementation uses `scikit-learn`'s default `PCA` behavior in all cases.
+All per-feature values are computed exactly from a single singular value decomposition of the standardized data, without fitting one PCA per feature.
 
 ## Installation
 
@@ -24,7 +24,6 @@ The package depends on:
 * `numpy`
 * `pandas`
 * `scikit-learn`
-* `joblib`
 
 ## Usage
 
@@ -90,7 +89,6 @@ clear_map_cache()
 MAP(
     X: pd.DataFrame,
     selected_features: list,
-    n_jobs: int = -1,
     benchmark: bool = False,
     force_rebuild: bool = False,
 ) -> float
@@ -104,13 +102,12 @@ Compute the MAP score.
 | ------------------- | -------------: | -------: | ----------------------------------------------------------------------------------------------------------------- |
 | `X`                 | `pd.DataFrame` | required | Input feature matrix. A DataFrame is recommended, especially when using string feature names.                     |
 | `selected_features` |         `list` | required | Selected feature names or integer column indices.                                                                 |
-| `n_jobs`            |          `int` |     `-1` | Number of parallel jobs passed to `joblib.Parallel`.                                                              |
 | `benchmark`         |         `bool` |  `False` | If `False`, computes MAP directly. If `True`, caches per-feature delta values for repeated calls on the same `X`. |
 | `force_rebuild`     |         `bool` |  `False` | If `True` and `benchmark=True`, rebuilds the cache for `X`.                                                       |
 
 #### Returns
 
-A normalized MAP score as a `float`.
+A normalized MAP score in `[0, 1]` as a `float`.
 
 In this implementation, if all features are selected, `MAP` returns `1`.
 
