@@ -157,7 +157,6 @@ def _scale_map(map_raw: float, theta_max: float) -> float:
 def MAP(
     X: pd.DataFrame,
     selected_features: list,
-    n_jobs: int = -1,
     benchmark: bool = False,
     force_rebuild: bool = False,
 ) -> float:
@@ -171,8 +170,6 @@ def MAP(
         string feature names or benchmark=True caching.
     selected_features:
         Selected feature names or integer column indices.
-    n_jobs:
-        Kept for compatibility; not used.
     benchmark:
         If False, compute MAP directly for the not-selected features.
         If True, cache per-feature delta values for X and reuse them across calls.
